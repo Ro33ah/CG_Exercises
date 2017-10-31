@@ -32,13 +32,59 @@ void ApplicationSolar::render() const {
     //Sets the states that the program uses
     glUseProgram(m_shaders.at("planet").handle);
 
+    Planet sun;
+
+    sun.scaleX = 0.3f;
+    sun.scaleY = 0.3f;
+    sun.scaleZ = 0.3f;
+    sun.timeDiff = 1.0f;
+
     Planet mercury;
 
     mercury.scaleX = 1.3f;
     mercury.scaleY = 1.3f;
     mercury.scaleZ = 1.3f;
 
-    renderPlanets(mercury);
+    mercury.translateX = 10.0f;
+    mercury.timeDiff = 1.3f;
+
+    Planet jupiter;
+
+    jupiter.scaleX = 0.5f;
+    jupiter.scaleY = 0.5f;
+    jupiter.scaleZ = 0.5f;
+
+    jupiter.translateX = 5.0f;
+    jupiter.timeDiff = 1.5f;
+
+
+    Planet mars;
+
+    mars.scaleX = 0.2f;
+    mars.scaleY = 0.2f;
+    mars.scaleZ = 0.2f;
+
+    mars.translateX = 3.0f;
+    mars.timeDiff = 2.0f;
+
+
+    Planet uranus;
+
+    uranus.scaleX = 0.7f;
+    uranus.scaleY = 0.7f;
+    uranus.scaleZ = 0.7f;
+
+    uranus.translateX = 7.0f;
+    uranus.timeDiff = 2.2f;
+
+            Planet arrayOfPlanet[5] = {sun, mercury, mars, jupiter, uranus};
+    for (int i = 0; i < 4; ++i) {
+        renderPlanets(arrayOfPlanet[i]);
+
+    }
+//    renderPlanets(uranus);
+
+
 
 
 }
@@ -140,14 +186,14 @@ void ApplicationSolar::renderPlanets(Planet thePlanet) const{
     //1st is the already created matrix obj
     //2nd parameter rotation values (deg)
     //3rd parameter is the rotation axis
-    glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
+    glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime() * thePlanet.timeDiff), glm::fvec3{0.0f, 1.0f, 0.0f});
 
 //    VERY IMPORTANT!!!! THE ORDER OF SCALING/ROTATION/TRANSFORMATION WILL AFFECT THE FINAL RESULT AND RENDER!!!!!
 
     //scale first
     model_matrix = glm::scale(model_matrix, glm::fvec3({thePlanet.scaleX, thePlanet.scaleY, thePlanet.scaleZ}));
     //translate the sphere according to the vector we have in the 2nd param
-    model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f, 0.0f, -1.0f});
+    model_matrix = glm::translate(model_matrix, glm::fvec3{thePlanet.translateX, 0.0f, -1.0f});
 
     glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
                        1, GL_FALSE, glm::value_ptr(model_matrix));

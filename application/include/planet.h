@@ -8,6 +8,14 @@ struct Planet {
     float scaleY;
     float scaleZ;
 
+    float translateX;
+    float translateY;
+    float translateZ;
+
+    float timeDiff;
+
+
+
 };
 
 
